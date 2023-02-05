@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:quiz_app/constants.dart';
+import 'package:quiz_app/screens/quiz/quiz_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -15,29 +17,27 @@ class WelcomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Spacer(flex: 2), // 2/6
+                  Spacer(flex: 2), //2/6
                   Text(
                     "Let's Play Quiz,",
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    style: Theme.of(context).textTheme.headline4.copyWith(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                   Text("Enter your informations below"),
                   Spacer(), // 1/6
                   TextField(
                     decoration: InputDecoration(
-                      fillColor: Color(0xFF1C2341),
                       filled: true,
+                      fillColor: Color(0xFF1C2341),
                       hintText: "Full Name",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
                     ),
                   ),
                   Spacer(), // 1/6
                   InkWell(
-                    onTap: () {},
+                    onTap: () => Get.to(QuizScreen()),
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,
@@ -50,12 +50,12 @@ class WelcomeScreen extends StatelessWidget {
                         "Lets Start Quiz",
                         style: Theme.of(context)
                             .textTheme
-                            .labelLarge
-                            ?.copyWith(color: Colors.black),
+                            .button
+                            .copyWith(color: Colors.black),
                       ),
                     ),
                   ),
-                  Spacer(), // 1/6
+                  Spacer(flex: 2), // it will take 2/6 spaces
                 ],
               ),
             ),
