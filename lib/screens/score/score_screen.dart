@@ -20,7 +20,7 @@ class ScoreScreen extends StatelessWidget {
                 "Score",
                 style: Theme.of(context)
                     .textTheme
-                    .headline3
+                    .displaySmall
                     .copyWith(color: kSecondaryColor),
               ),
               Spacer(),

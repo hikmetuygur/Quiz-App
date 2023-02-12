@@ -1,59 +1,77 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:quiz_app/constants.dart';
+import 'package:quiz_app/controllers/question_controller.dart';
+import 'package:quiz_app/models/Questions.dart';
+import 'package:flutter_svg/svg.dart';
+
+import 'progress_bar.dart';
+import 'question_card.dart';
 
 class Body extends StatelessWidget {
+  const Body({
+    Key key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    // So that we have acccess our controller
+    QuestionController _questionController = Get.put(QuestionController());
     return Stack(
       children: [
         SvgPicture.asset("assets/icons/bg.svg", fit: BoxFit.fill),
         SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-            child: Column(
-              children: [ProgressBar()],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ProgressBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 35,
-      decoration: BoxDecoration(
-        border: Border.all(color: Color(0xFF3F4768)),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: Stack(children: [
-        LayoutBuilder(
-          builder: (context, Constraints) => Container(
-            width: Constraints.maxWidth * 0.5,
-            decoration: BoxDecoration(
-              gradient: kPrimaryGradient,
-              borderRadius: BorderRadius.circular(50),
-            ),
-          ),
-        ),
-        Positioned.fill(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("18 sec"),
-              SvgPicture.asset("assets/icons/clock.svg")
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                child: ProgressBar(),
+              ),
+              SizedBox(height: kDefaultPadding),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                child: Obx(
+                  () => Text.rich(
+                    TextSpan(
+                      text:
+                          "Question ${_questionController.questionNumber.value}",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4
+                          .copyWith(color: kSecondaryColor),
+                      children: [
+                        TextSpan(
+                          text: "/${_questionController.questions.length}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline5
+                              .copyWith(color: kSecondaryColor),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Divider(thickness: 1.5),
+              SizedBox(height: kDefaultPadding),
+              Expanded(
+                child: PageView.builder(
+                  // Block swipe to next qn
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: _questionController.pageController,
+                  onPageChanged: _questionController.updateTheQnNum,
+                  itemCount: _questionController.questions.length,
+                  itemBuilder: (context, index) => QuestionCard(
+                      question: _questionController.questions[index]),
+                ),
+              ),
             ],
           ),
-        ))
-      ]),
+        )
+      ],
     );
   }
 }
